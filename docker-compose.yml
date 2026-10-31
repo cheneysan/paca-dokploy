@@ -5,13 +5,13 @@
 # are embedded in the API binary and applied automatically on every startup
 # using idempotent SQL (CREATE TABLE IF NOT EXISTS / INSERT … ON CONFLICT).
 #
-# ── Quick start ───────────────────────────────────────────────────────────────
+# ── Quick start ──────────────────────────────────────────────────────────
 # The recommended way to set this up is via the install script:
 #
 #   curl -fsSL https://github.com/Paca-AI/paca/releases/latest/download/install.sh -o install.sh
 #   bash install.sh
 #
-# ── Manual setup ──────────────────────────────────────────────────────────────
+# ── Manual setup ──────────────────────────────────────────────────────────
 # 1. Download the Caddyfile alongside this file:
 #    mkdir -p caddy
 #    curl -fsSL https://github.com/Paca-AI/paca/releases/latest/download/Caddyfile -o caddy/Caddyfile
@@ -21,7 +21,7 @@
 # 3. Start the stack:
 #    docker compose --env-file .env up -d
 #
-# ── Image pinning ─────────────────────────────────────────────────────────────
+# ── Image pinning ──────────────────────────────────────────────────────────
 # Set these in .env to pin a specific release:
 #   PACA_API_IMAGE=pacaai/paca-api:1.2.3
 #   PACA_WEB_IMAGE=pacaai/paca-web:1.2.3
@@ -70,7 +70,7 @@
 # can never collide. PORT_FORWARD_HOST is purely descriptive, same
 # reasoning as SSH_BASTION_HOST.
 #
-# ── External PostgreSQL ────────────────────────────────────────────────────────
+# ── External PostgreSQL ───────────────────────────────────────────────────────
 # Set DATABASE_URL to your managed connection string and add --scale postgres=0
 # to suppress the bundled container:
 #   docker compose --env-file .env up -d --scale postgres=0
@@ -79,7 +79,7 @@
 # Set STORAGE_PROVIDER=s3 with real AWS credentials and add --scale rustfs=0:
 #   docker compose --env-file .env up -d --scale rustfs=0
 #
-# ── Skip AI agent ─────────────────────────────────────────────────────────────
+# ── Skip AI agent ─────────────────────────────────────────────────────────
 #   docker compose --env-file .env up -d --scale agent-runner=0
 #
 # ── External / CDN-hosted web app (e.g. deployed to S3 + CloudFront) ──────────
@@ -90,7 +90,7 @@
 name: paca
 
 services:
-  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  # ── PostgreSQL ──────────────────────────────────────────────────────────
   # Suppress with --scale postgres=0 when using an external managed database.
   postgres:
     image: postgres:16-alpine
@@ -108,7 +108,7 @@ services:
       timeout: 5s
       retries: 10
 
-  # ── Database backups ─────────────────────────────────────────────────────────
+  # ── Database backups ───────────────────────────────────────────────────────
   # Writes a gzip-compressed pg_dump to BACKUP_DIR on the schedule given by
   # BACKUP_CRON (standard 5-field cron syntax), deleting dumps older than
   # BACKUP_RETENTION_DAYS. Works against the bundled postgres container above
@@ -227,7 +227,7 @@ services:
       timeout: 5s
       retries: 10
 
-  # ── API (Go backend) ────────────────────────────────────────────────────────
+  # ── API (Go backend) ───────────────────────────────────────────────────────
   api:
     image: ${PACA_API_IMAGE:-pacaai/paca-api:latest}
     restart: unless-stopped
@@ -337,7 +337,6 @@ services:
     restart: unless-stopped
     ports:
       - "${GATEWAY_PORT:-80}:80"
-      - "${GATEWAY_HTTPS_PORT:-443}:443"
     environment:
       # A domain name (e.g. paca.example.com) makes Caddy request and renew
       # a Let's Encrypt certificate automatically. Leave unset (or ":80") for
